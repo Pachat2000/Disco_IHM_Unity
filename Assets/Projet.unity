@@ -822,6 +822,9 @@ MonoBehaviour:
   green: {fileID: 978485093}
   blue: {fileID: 658586984}
   color: {fileID: 487804719}
+  puissanceEblouissement: 20
+  intensiteLumineuseSoleil: 100
+  porteeSoleil: 50
   myToggle: {fileID: 379724979}
 --- !u!114 &378272080
 MonoBehaviour:
