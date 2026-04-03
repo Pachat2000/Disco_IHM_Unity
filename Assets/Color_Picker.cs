@@ -8,24 +8,25 @@ public class Color_Picker : MonoBehaviour
     public Slider green;
     public Slider blue;
     public RawImage color;
-    public float puissanceEblouissement = 20f; 
-    // Puissance de la lumière émise sur le sol/décor
-    public float intensiteLumineuseSoleil = 100f; 
-    // Portée de la lumière du soleil
-    public float porteeSoleil = 50f;
 
-    public Toggle myToggle;
-    private bool activated;
+    public Toggle objectColorToggle;
+    public Toggle lightColorToggle;
+
+    private bool activatedMeshColor;
+
+    private bool activatedLightColor;
 
     void Start()
     {
-        myToggle.onValueChanged.AddListener(ActivateWidget);
-        activated = myToggle.isOn;
+        objectColorToggle.onValueChanged.AddListener(ActivateSwitchMeshColor);
+        lightColorToggle.onValueChanged.AddListener(ActivateSwitchLight);
     }
 
     // Update is called once per frame
     void Update()
     {
+        activatedMeshColor = objectColorToggle.isOn;
+        activatedLightColor = lightColorToggle.isOn;
         float valueR = red.value;
         float valueG = green.value;
         float valueB = blue.value;
@@ -34,8 +35,12 @@ public class Color_Picker : MonoBehaviour
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {   
-            if(activated)
+            if(activatedMeshColor){
                 ApplyColor(newColor);
+            }
+            if(activatedLightColor){
+                ApplyLightColor(newColor);
+            }
         }
                 
     }
@@ -54,27 +59,36 @@ public class Color_Picker : MonoBehaviour
                 renderer.material.color = color.color; 
                 
             }
+        }   
+        
+    }
+
+
+    void ApplyLightColor(Color nouvelleCouleur)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
             Light lumiere =  hit.collider.GetComponent<Light>();
 
             if (lumiere != null)
             {
                 lumiere.color = color.color;
             }
-            else{
-                GameObject objetTouche = hit.collider.gameObject;               
-                lumiere = objetTouche.AddComponent<Light>();
-                lumiere.type = LightType.Point;
-                lumiere.range = 5f;             
-                lumiere.intensity = 5f;         
-                lumiere.color = color.color;
-            }
-            
+
         }   
         
     }
 
-    public void ActivateWidget(bool isOn)
+    public void ActivateSwitchMeshColor(bool isOn)
     {
-        activated = isOn;
+        activatedMeshColor = isOn;
+    }
+
+    public void ActivateSwitchLight(bool isOn)
+    {
+        activatedLightColor = isOn;
     }
 }
