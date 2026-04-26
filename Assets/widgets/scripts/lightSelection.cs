@@ -8,9 +8,11 @@ using UnityEngine.UI;
 public class lightSelection : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public Dropdown m_Dropdown;
+    public Dropdown m_Dropdown; //liste des lights
+    public Dropdown type_light_Dropdown; //types des lights
 
     public Slider slider_intensity;
+    public Slider slider_temperature;
 
     private List<Light> allLights = new List<Light>();
 
@@ -21,34 +23,47 @@ public class lightSelection : MonoBehaviour
 
         if (!scene.isLoaded)
         {
-            Debug.LogError("La scËne n'est pas chargÈe !");
+            Debug.LogError("La sc√©ne n'est pas charg√©e !");
             return;
         }
 
 
-        //Debug.Log("List GameObject on");
-
-        // RÈcupËre les objets racines
+        // R√©cup√©re les objets racines
         GameObject[] roots = scene.GetRootGameObjects();
-        //Debug.Log("GameObject[] on");
 
         foreach (GameObject root in roots)
         {
-            // rÈcupËre toutes les lights dans le root + enfants
+            // r√©cup√©re toutes les lights dans le root + enfants
             Light[] lights = root.GetComponentsInChildren<Light>(true);
 
             allLights.AddRange(lights);
         }
 
-        // Dropdown
+        // Dropdown light liste
         List<string> names = new List<string>();
         foreach (Light l in allLights)
         {
             names.Add(l.name);
         }
-
         m_Dropdown.AddOptions(names);
+
+        // Dropdown light_type list
+        //type_light_Dropdown.ClearOptions();
+        List<string> types = new List<string>()
+        {
+            "Point",
+            "Directional",
+            "Spot",
+            "Area"
+        };
+
+        type_light_Dropdown.AddOptions(types);
+
+        
         slider_intensity.onValueChanged.AddListener((float val) => changeIntensity(val));
+        slider_temperature.onValueChanged.AddListener(val => changeTemperature(val));
+        type_light_Dropdown.onValueChanged.AddListener(ChangeLightType);
+        m_Dropdown.onValueChanged.AddListener(OnLightSelected);
     }
 
     // Update is called once per frame
@@ -63,20 +78,74 @@ public class lightSelection : MonoBehaviour
         if (m_Dropdown != null)
         {
             string dropdownValue = m_Dropdown.options[m_Dropdown.value].text;
-            Debug.Log(dropdownValue);
 
-            Light selected_light;
-
-            //Ne garde que la derniËre light avec le bon nom
+            //Ne garde que la derniÔøΩre light avec le bon nom
             foreach(Light l in allLights)
             {
                 if (l.name.Equals(dropdownValue))
                 {
-                    selected_light = l;
-                    selected_light.intensity = intensity;
+                    l.intensity = intensity;
                 }
             }
 
         }
+    }
+
+    public void changeTemperature(float temp)
+    {
+        if (m_Dropdown != null)
+        {
+            string dropdownValue = m_Dropdown.options[m_Dropdown.value].text;
+
+            //Ne garde que la derniÔøΩre light avec le bon nom
+            foreach (Light l in allLights)
+            {
+                if (l.name.Equals(dropdownValue))
+                {
+                    l.colorTemperature = temp;
+                }
+            }
+
+        }
+    }
+
+    public void ChangeLightType(int index)
+    {
+        if (m_Dropdown != null && allLights.Count > 0)
+        {
+            Light selectedLight = allLights[m_Dropdown.value];
+
+            switch (index)
+            {
+                case 0:
+                    selectedLight.type = LightType.Point;
+                    break;
+                case 1:
+                    selectedLight.type = LightType.Directional;
+                    break;
+                case 2:
+                    selectedLight.type = LightType.Spot;
+                    break;
+                case 3:
+                    selectedLight.type = LightType.Rectangle; //repr√©sente Area car Area est d√©pr√©ci√©
+                    break;
+            }
+        }
+    }
+
+    void OnLightSelected(int index)
+    {
+        Light l = allLights[index];
+
+        switch (l.type)
+        {
+            case LightType.Point: type_light_Dropdown.value = 0; break;
+            case LightType.Directional: type_light_Dropdown.value = 1; break;
+            case LightType.Spot: type_light_Dropdown.value = 2; break;
+            case LightType.Rectangle: type_light_Dropdown.value = 3; break;
+        }
+
+        slider_intensity.value = l.intensity;
+        slider_temperature.value = l.colorTemperature;
     }
 }
