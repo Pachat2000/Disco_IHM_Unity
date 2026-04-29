@@ -37,6 +37,10 @@
 
 
             sound = GetComponent<AudioSource>();
+            if (playlist.Length > 0){
+                sound.clip = playlist[0];
+                timeSlider.maxValue = sound.clip.length;
+            }
             volumeSlider.onValueChanged.AddListener(ChangeVolume);
 
             List<string> options = new List<string>();
@@ -44,9 +48,9 @@
             {
                 options.Add(clip.name);
             }
+            
             musicDropdown.AddOptions(options);
             musicDropdown.onValueChanged.AddListener(ChangeMusic);
-            timeSlider.maxValue = sound.clip.length;
             timeSlider.onValueChanged.AddListener(ChangeTime);
             ChangeIcon();
         }
@@ -54,7 +58,7 @@
         // Update is called once per frame
         void Update()
         {   
-            if(sound.isPlaying){
+            if(sound.isPlaying  && sound.clip != null){
                 float[] spectrum = new float[256];
                 // on récupère les Données de spectre du son dans un tableau de float
                 sound.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
@@ -97,7 +101,7 @@
         // Permet de changer l'icone du bouton selon si le son est joué 
         void ChangeIcon(){
             Image imageBttn = startBttn.GetComponent<Image>();
-            if(sound.isPlaying){
+            if(sound.isPlaying || sound.clip == null){
                 imageBttn.sprite = pauseIcon;
             }
             else{

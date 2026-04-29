@@ -2276,9 +2276,7 @@ MonoBehaviour:
   - {fileID: 2490313905364311766}
   - {fileID: 7899595180733072519}
   - {fileID: 3763860063283115745}
-  playlist:
-  - {fileID: 8300000, guid: a4500fb81d3edc761a1d4067284a5eb6, type: 3}
-  - {fileID: 8300000, guid: a7fc9bd0f107fb0a389b8b1939a83bf3, type: 3}
+  playlist: []
   musicDropdown: {fileID: 3397910070042883559}
   pitchSlider: {fileID: 3497124114135205971}
   timeSlider: {fileID: 6268378358027355122}
@@ -2294,7 +2292,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: a4500fb81d3edc761a1d4067284a5eb6, type: 3}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
