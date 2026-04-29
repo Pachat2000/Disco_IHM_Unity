@@ -78,8 +78,8 @@ public class lightSelection : MonoBehaviour
         {
             string dropdownValue = m_Dropdown.options[m_Dropdown.value].text;
 
-            //Ne garde que la dernière light avec le bon nom
-            foreach(Light l in allLights)
+            //Modifie toute les lights avec le bon nom
+            foreach (Light l in allLights)
             {
                 if (l.name.Equals(dropdownValue))
                 {
@@ -96,7 +96,7 @@ public class lightSelection : MonoBehaviour
         {
             string dropdownValue = m_Dropdown.options[m_Dropdown.value].text;
 
-            //Ne garde que la dernière light avec le bon nom
+            //Modifie toute les lights avec le bon nom
             foreach (Light l in allLights)
             {
                 if (l.name.Equals(dropdownValue))
