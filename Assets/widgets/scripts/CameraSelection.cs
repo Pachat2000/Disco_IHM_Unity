@@ -20,14 +20,14 @@ public class CameraSelection : MonoBehaviour
         GameObject[] roots = scene.GetRootGameObjects();
 
         foreach(GameObject root in roots){
-            // Pour chaque Game Object, on récupère toutes les camera qu'il possède
+            // Pour chaque Game Object, on récupère toutes les cameras qu'il possède
             Camera[] cameras = root.GetComponentsInChildren<Camera>(true);
             allCamera.AddRange(cameras);
         }
 
         List<string> names = new List<string>();
         foreach(Camera camera in allCamera){
-            // Pou chaque camera, on désactif chaque camera et
+            // Pour chaque camera, on désactive chaque camera et
             // on récupère le nom de chaque caméra pour le dropdown
             camera.enabled = false;
             names.Add(camera.name);
@@ -36,7 +36,7 @@ public class CameraSelection : MonoBehaviour
 
         cameraSelection.onValueChanged.AddListener(OncameraSelected);
 
-        // On active la première camera trouvé
+        // On active la première camera trouvée
         OncameraSelected(cameraSelection.value);
     }
 
@@ -49,7 +49,7 @@ public class CameraSelection : MonoBehaviour
     void OncameraSelected(int index){
         if(allCamera.Count == 0) return;
         if(currentCamera != null){
-            // on desactif l'ancienne camera active avec son audio (si il en a)
+            // on désactive l'ancienne camera active avec son audio (si il en a)
             currentCamera.enabled = false;
             if(currentCamera.GetComponent<AudioListener>() != null)currentCamera.GetComponent<AudioListener>().enabled = false;
         }  

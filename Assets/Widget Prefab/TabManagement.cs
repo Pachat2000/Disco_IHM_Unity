@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,12 +10,6 @@ public class TabManagement : MonoBehaviour
     public GameObject ButtonOngletPrefab;
     public Transform tabBar;
     public Transform tabPanels;
-
-    //public Transform contentArea;
-
-    
-    
-    //private TabManagement tabManager;
 
     private List<GameObject> panels = new List<GameObject>();
     private List<GameObject> buttons = new List<GameObject>();
@@ -43,24 +35,20 @@ public class TabManagement : MonoBehaviour
 
     public void GenerateTabs()
     {
-        //int count;
         if (inputField > 0)
         {
             this.CreateTabs(inputField);
         }
     }
 
-    // Devrait être dans le start
     public void CreateTabs(int count)
     {
-
-        //ClearTabs();
 
         for (int i = 0; i < count; i++)
         {
             int index = i;
 
-            // Créer bouton
+            // Créer un bouton et son contenu
             GameObject btnObj = Instantiate(ButtonOngletPrefab, tabBar);
             btnObj.GetComponentInChildren<Text>().text = "" + (i + 1);
             btnObj.AddComponent<LayoutElement>();
@@ -71,18 +59,15 @@ public class TabManagement : MonoBehaviour
 
             buttons.Add(btnObj);
 
-            // Créer panel
-            GameObject panel = Instantiate(tabPanelPrefab, tabPanels); //, contentArea
+            // Créer panel contenant un widget
+            GameObject panel = Instantiate(tabPanelPrefab, tabPanels);
             if (tabsWidgets[i] != null)
             {
-                Debug.Log("Il y a un widget");
+                //Debug.Log("Il y a un widget");
                 GameObject widget = Instantiate(tabsWidgets[i], panel.transform);
-                //panel = Instantiate(tabsWidgets[i]);
-                Debug.Log("Widget charge");
+                //Debug.Log("Widget charge");
             }
-            //panel.AddComponent<Panel>
-            
-                   
+                
             panel.SetActive(false);
 
             // Ajouter comportement clic
@@ -104,20 +89,11 @@ public class TabManagement : MonoBehaviour
 
     void SelectTab(int index)
     {
+        //active le panel à la position index
         for (int i = 0; i < panels.Count; i++)
         {
             panels[i].SetActive(i == index);
         }
     }
 
-    void ClearTabs()
-    {
-        foreach (Transform child in tabBar)
-            Destroy(child.gameObject);
-
-        //foreach (Transform child in contentArea)
-            //Destroy(child.gameObject);
-
-        panels.Clear();
-    }
 }

@@ -48,7 +48,6 @@ public class lightSelection : MonoBehaviour
         m_Dropdown.AddOptions(names);
 
         // Dropdown light_type list
-        //type_light_Dropdown.ClearOptions();
         List<string> types = new List<string>()
         {
             "Point",
@@ -59,7 +58,7 @@ public class lightSelection : MonoBehaviour
 
         type_light_Dropdown.AddOptions(types);
 
-        
+        //On créer les triggers
         slider_intensity.onValueChanged.AddListener((float val) => changeIntensity(val));
         slider_temperature.onValueChanged.AddListener(val => changeTemperature(val));
         type_light_Dropdown.onValueChanged.AddListener(ChangeLightType);
@@ -79,7 +78,7 @@ public class lightSelection : MonoBehaviour
         {
             string dropdownValue = m_Dropdown.options[m_Dropdown.value].text;
 
-            //Ne garde que la derni�re light avec le bon nom
+            //Ne garde que la dernière light avec le bon nom
             foreach(Light l in allLights)
             {
                 if (l.name.Equals(dropdownValue))
@@ -97,7 +96,7 @@ public class lightSelection : MonoBehaviour
         {
             string dropdownValue = m_Dropdown.options[m_Dropdown.value].text;
 
-            //Ne garde que la derni�re light avec le bon nom
+            //Ne garde que la dernière light avec le bon nom
             foreach (Light l in allLights)
             {
                 if (l.name.Equals(dropdownValue))
@@ -113,8 +112,10 @@ public class lightSelection : MonoBehaviour
     {
         if (m_Dropdown != null && allLights.Count > 0)
         {
+            //récupére la lumière actuel
             Light selectedLight = allLights[m_Dropdown.value];
 
+            //change le type de lumière selon ce qui est sélectionné dans le dropbar
             switch (index)
             {
                 case 0:
@@ -135,6 +136,10 @@ public class lightSelection : MonoBehaviour
 
     void OnLightSelected(int index)
     {
+        /**
+         * Modifie dropbar type, slider d'intensité et slider de température
+         * Quand on change de lumière.
+         */
         Light l = allLights[index];
 
         switch (l.type)
